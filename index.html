@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BJJ Manager – Sistema de Gestão para Academias</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --red: #cc0000;
             --dark-red: #990000;
-            --black: #0a0a0a;
-            --dark: #111111;
-            --card: #1a1a1a;
-            --border: #2a2a2a;
-            --text: #ffffff;
-            --muted: #888888;
+            --black: #080808;
+            --dark: #0f0f0f;
+            --card: #161616;
+            --card2: #1e1e1e;
+            --border: #252525;
+            --text: #f0f0f0;
+            --muted: #777777;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
         body {
             font-family: 'Barlow', sans-serif;
@@ -26,7 +29,7 @@
             overflow-x: hidden;
         }
 
-        /* NAV */
+        /* ── NAV ── */
         nav {
             position: fixed;
             top: 0; left: 0; right: 0;
@@ -34,132 +37,219 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 60px;
-            background: rgba(10,10,10,0.95);
+            padding: 0 60px;
+            height: 70px;
+            background: rgba(8,8,8,0.97);
             border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
         }
 
+        /* LOGO COM FAIXA PRETA */
         .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .belt-icon {
+            position: relative;
+            width: 44px;
+            height: 28px;
+        }
+
+        .belt-body {
+            width: 44px;
+            height: 18px;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 4px;
+            position: absolute;
+            top: 5px;
+        }
+
+        .belt-stripe {
+            position: absolute;
+            right: 0;
+            top: 5px;
+            width: 14px;
+            height: 18px;
+            background: var(--red);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .belt-knot {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 28px;
+            background: #222;
+            border: 2px solid #333;
+            border-radius: 3px;
+            z-index: 2;
+        }
+
+        .belt-knot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 2px;
+            background: var(--red);
+        }
+
+        .logo-text {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 28px;
-            letter-spacing: 3px;
+            font-size: 26px;
+            letter-spacing: 4px;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .logo-text span {
             color: var(--red);
         }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover { color: var(--text); }
 
         .nav-btn {
             background: var(--red);
             color: white;
             border: none;
-            padding: 12px 28px;
+            padding: 10px 24px;
             border-radius: 6px;
             font-family: 'Barlow', sans-serif;
-            font-size: 15px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
             text-decoration: none;
+            letter-spacing: 0.5px;
             transition: background 0.2s;
         }
 
         .nav-btn:hover { background: var(--dark-red); }
 
-        /* HERO */
+        /* ── HERO ── */
         .hero {
             min-height: 100vh;
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 120px 40px 80px;
+            padding: 100px 80px 60px;
             position: relative;
             overflow: hidden;
+            gap: 60px;
         }
 
         .hero::before {
             content: '';
             position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 50% 40%, rgba(204,0,0,0.15) 0%, transparent 70%);
+            top: -200px; left: -200px;
+            width: 700px; height: 700px;
+            background: radial-gradient(circle, rgba(204,0,0,0.08) 0%, transparent 70%);
+            pointer-events: none;
         }
 
-        .hero-belt {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #000 20%, var(--red) 50%, #000 80%);
-        }
+        .hero-left { position: relative; z-index: 1; }
 
-        .hero-tag {
-            display: inline-block;
-            background: rgba(204,0,0,0.15);
-            border: 1px solid rgba(204,0,0,0.4);
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(204,0,0,0.1);
+            border: 1px solid rgba(204,0,0,0.3);
             color: var(--red);
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 24px;
-            animation: fadeUp 0.6s ease both;
+            margin-bottom: 28px;
+            animation: fadeUp 0.5s ease both;
         }
 
         .hero h1 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(60px, 10vw, 120px);
-            line-height: 0.95;
-            letter-spacing: 4px;
-            margin-bottom: 24px;
-            animation: fadeUp 0.6s ease 0.1s both;
+            font-size: clamp(56px, 7vw, 96px);
+            line-height: 0.92;
+            letter-spacing: 3px;
+            margin-bottom: 28px;
+            animation: fadeUp 0.5s ease 0.1s both;
         }
 
-        .hero h1 span { color: var(--red); }
+        .hero h1 em {
+            font-style: normal;
+            color: var(--red);
+            display: block;
+        }
 
-        .hero p {
-            font-size: clamp(16px, 2vw, 20px);
+        .hero-desc {
+            font-size: 18px;
             color: var(--muted);
-            max-width: 560px;
-            margin: 0 auto 40px;
-            line-height: 1.6;
-            animation: fadeUp 0.6s ease 0.2s both;
+            line-height: 1.7;
+            max-width: 460px;
+            margin-bottom: 40px;
+            animation: fadeUp 0.5s ease 0.2s both;
         }
 
         .hero-btns {
             display: flex;
-            gap: 16px;
-            justify-content: center;
+            gap: 14px;
             flex-wrap: wrap;
-            animation: fadeUp 0.6s ease 0.3s both;
+            animation: fadeUp 0.5s ease 0.3s both;
         }
 
         .btn-primary {
             background: var(--red);
             color: white;
             border: none;
-            padding: 18px 40px;
-            border-radius: 8px;
+            padding: 16px 36px;
+            border-radius: 6px;
             font-family: 'Barlow', sans-serif;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             text-decoration: none;
             transition: all 0.2s;
             display: inline-block;
+            letter-spacing: 0.5px;
         }
 
         .btn-primary:hover {
             background: var(--dark-red);
             transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(204,0,0,0.3);
         }
 
-        .btn-secondary {
+        .btn-outline {
             background: transparent;
-            color: white;
-            border: 2px solid var(--border);
-            padding: 18px 40px;
-            border-radius: 8px;
+            color: var(--text);
+            border: 1.5px solid var(--border);
+            padding: 16px 36px;
+            border-radius: 6px;
             font-family: 'Barlow', sans-serif;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             text-decoration: none;
@@ -167,185 +257,376 @@
             display: inline-block;
         }
 
-        .btn-secondary:hover {
+        .btn-outline:hover {
             border-color: var(--red);
             color: var(--red);
         }
 
-        /* STATS */
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            padding: 60px 40px;
-            border-top: 1px solid var(--border);
-            border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
+        /* HERO RIGHT - MOCK */
+        .hero-right {
+            animation: fadeUp 0.5s ease 0.4s both;
         }
 
-        .stat {
-            text-align: center;
+        .mock-screen {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
         }
+
+        .mock-header {
+            background: #000;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid var(--red);
+        }
+
+        .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+        .mock-header-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            letter-spacing: 3px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mock-body { padding: 20px; }
+
+        .mock-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .mock-card {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .mock-card-icon { font-size: 24px; margin-bottom: 8px; }
+        .mock-card-label { font-size: 13px; font-weight: 700; color: var(--red); margin-bottom: 4px; }
+        .mock-card-sub { font-size: 11px; color: var(--muted); }
+
+        .mock-list { display: flex; flex-direction: column; gap: 8px; }
+
+        .mock-item {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            border-left: 3px solid;
+        }
+
+        .mock-item.verde { border-left-color: #4caf50; }
+        .mock-item.laranja { border-left-color: #ff9800; }
+        .mock-item.vermelho { border-left-color: var(--red); }
+
+        .mock-pct { font-weight: 700; font-size: 14px; }
+        .verde .mock-pct { color: #4caf50; }
+        .laranja .mock-pct { color: #ff9800; }
+        .vermelho .mock-pct { color: var(--red); }
+
+        /* ── STATS ── */
+        .stats-bar {
+            background: var(--dark);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 50px 80px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .stat { text-align: center; }
 
         .stat-num {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 52px;
+            font-size: 56px;
             color: var(--red);
             letter-spacing: 2px;
             line-height: 1;
         }
 
         .stat-label {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--muted);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
+            letter-spacing: 1.5px;
+            margin-top: 6px;
         }
 
-        /* FEATURES */
-        .section {
-            padding: 100px 40px;
-            max-width: 1100px;
+        /* ── HOW IT WORKS ── */
+        .how-section {
+            padding: 120px 80px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        .section-tag {
-            font-size: 13px;
+        .section-eyebrow {
+            font-size: 12px;
             font-weight: 700;
             color: var(--red);
             letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .section-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(40px, 6vw, 64px);
+            font-size: clamp(40px, 5vw, 68px);
             letter-spacing: 2px;
-            margin-bottom: 16px;
             line-height: 1;
+            margin-bottom: 60px;
         }
 
-        .section-sub {
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .step {
+            background: var(--card);
+            padding: 48px 40px;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .step:hover { background: var(--card2); }
+
+        .step-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 80px;
+            color: rgba(204,0,0,0.12);
+            line-height: 1;
+            margin-bottom: 20px;
+            transition: color 0.3s;
+        }
+
+        .step:hover .step-num { color: rgba(204,0,0,0.25); }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .step-desc {
             color: var(--muted);
-            font-size: 17px;
-            max-width: 500px;
-            line-height: 1.6;
-            margin-bottom: 60px;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* ── FEATURES ── */
+        .features-section {
+            background: var(--dark);
+            padding: 120px 80px;
+        }
+
+        .features-inner {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
         .feature-card {
-            background: var(--card);
+            background: var(--black);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 14px;
             padding: 36px;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: var(--red);
-            transform: scaleX(0);
-            transition: transform 0.3s;
+            cursor: default;
         }
 
         .feature-card:hover {
-            border-color: rgba(204,0,0,0.3);
+            border-color: rgba(204,0,0,0.4);
             transform: translateY(-4px);
-        }
-
-        .feature-card:hover::before {
-            transform: scaleX(1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         .feature-icon {
-            font-size: 36px;
+            width: 52px; height: 52px;
+            background: rgba(204,0,0,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
             margin-bottom: 20px;
         }
 
         .feature-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             margin-bottom: 10px;
         }
 
         .feature-desc {
             color: var(--muted);
-            font-size: 15px;
-            line-height: 1.6;
+            font-size: 14px;
+            line-height: 1.7;
         }
 
-        /* PRICING */
+        /* ── TESTIMONIALS ── */
+        .testimonials-section {
+            padding: 120px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .testimonial {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 36px;
+        }
+
+        .testimonial-stars {
+            color: var(--red);
+            font-size: 18px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+
+        .testimonial-text {
+            color: #bbb;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            background: var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
+            color: white;
+        }
+
+        .author-name { font-weight: 700; font-size: 15px; }
+        .author-role { font-size: 13px; color: var(--muted); }
+
+        /* ── PRICING ── */
         .pricing-section {
-            padding: 100px 40px;
             background: var(--dark);
+            padding: 120px 80px;
         }
 
         .pricing-inner {
-            max-width: 700px;
+            max-width: 600px;
             margin: 0 auto;
             text-align: center;
         }
 
         .price-card {
-            background: var(--card);
-            border: 2px solid var(--red);
-            border-radius: 24px;
-            padding: 60px 40px;
-            margin-top: 60px;
+            background: var(--black);
+            border: 1.5px solid var(--red);
+            border-radius: 20px;
+            padding: 56px 48px;
+            margin-top: 56px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            box-shadow: 0 0 60px rgba(204,0,0,0.08);
         }
 
         .price-badge {
             background: var(--red);
             color: white;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
-            letter-spacing: 1px;
-            padding: 6px 14px;
-            border-radius: 20px;
+            letter-spacing: 2px;
+            padding: 6px 16px;
+            border-radius: 4px;
             text-transform: uppercase;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
+        }
+
+        .price-original {
+            color: #555;
+            font-size: 20px;
+            text-decoration: line-through;
+            margin-bottom: 4px;
         }
 
         .price-value {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 80px;
+            font-size: 88px;
             color: var(--red);
             letter-spacing: 2px;
             line-height: 1;
         }
 
-        .price-period {
+        .price-cents {
             color: var(--muted);
             font-size: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
+        }
+
+        .price-economy {
+            background: rgba(204,0,0,0.1);
+            border: 1px solid rgba(204,0,0,0.3);
+            color: #ff7070;
+            padding: 7px 20px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 36px;
+        }
+
+        .price-divider {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            margin-bottom: 36px;
         }
 
         .price-features {
             list-style: none;
+            width: 100%;
+            max-width: 340px;
             margin-bottom: 40px;
             text-align: left;
-            width: 100%;
-            max-width: 360px;
         }
 
         .price-features li {
-            padding: 10px 0;
+            padding: 11px 0;
             font-size: 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -359,12 +640,66 @@
             content: '✓';
             color: var(--red);
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
+            flex-shrink: 0;
         }
 
-        /* CTA */
+        /* ── FAQ ── */
+        .faq-section {
+            padding: 120px 80px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-list { display: flex; flex-direction: column; gap: 2px; }
+
+        .faq-item {
+            background: var(--card);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .faq-question {
+            padding: 22px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            transition: color 0.2s;
+        }
+
+        .faq-question:hover { color: var(--red); }
+
+        .faq-arrow {
+            color: var(--red);
+            font-size: 20px;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-arrow { transform: rotate(45deg); }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .faq-item.open .faq-answer { max-height: 200px; }
+
+        .faq-answer-inner { padding: 0 28px 22px; }
+
+        /* ── CTA FINAL ── */
         .cta-section {
-            padding: 120px 40px;
+            background: var(--dark);
+            padding: 120px 80px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -374,15 +709,15 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at 50% 50%, rgba(204,0,0,0.1) 0%, transparent 70%);
+            background: radial-gradient(ellipse at 50% 100%, rgba(204,0,0,0.12) 0%, transparent 60%);
         }
 
         .cta-section h2 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(48px, 8vw, 96px);
+            font-size: clamp(48px, 7vw, 96px);
             letter-spacing: 4px;
             line-height: 1;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             position: relative;
         }
 
@@ -393,41 +728,72 @@
             position: relative;
         }
 
-        /* FOOTER */
-        footer {
-            padding: 40px;
-            text-align: center;
-            border-top: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 14px;
+        .cta-note {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #444;
         }
 
-        footer span { color: var(--red); }
+        /* ── FOOTER ── */
+        footer {
+            padding: 40px 80px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
 
-        /* ANIMATIONS */
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            letter-spacing: 3px;
+            color: var(--muted);
+        }
+
+        .footer-copy {
+            font-size: 13px;
+            color: #444;
+        }
+
+        .footer-copy span { color: var(--red); }
+
+        /* ── ANIMATIONS ── */
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(24px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(24px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* MOBILE */
-        @media (max-width: 768px) {
-            nav { padding: 16px 24px; }
-            .stats { gap: 30px; }
-            .section { padding: 60px 24px; }
-            .pricing-section { padding: 60px 24px; }
+        /* ── MOBILE ── */
+        @media (max-width: 900px) {
+            nav { padding: 0 24px; }
+            .nav-links { display: none; }
+            .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 40px; }
+            .hero-right { display: none; }
+            .stats-bar { padding: 40px 24px; }
+            .how-section, .features-section .features-inner, .testimonials-section, .faq-section { padding: 80px 24px; }
+            .features-section { padding: 80px 0; }
+            .steps { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .pricing-section { padding: 80px 24px; }
             .cta-section { padding: 80px 24px; }
+            footer { padding: 32px 24px; flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -435,26 +801,86 @@
 
 <!-- NAV -->
 <nav>
-    <div class="nav-logo">BJJ Manager</div>
-    <a href="https://wa.me/55?text=Olá! Quero saber mais sobre o BJJ Manager" class="nav-btn" target="_blank">Falar no WhatsApp</a>
+    <a href="#" class="nav-logo">
+        <div class="belt-icon">
+            <div class="belt-body"></div>
+            <div class="belt-stripe"></div>
+            <div class="belt-knot"></div>
+        </div>
+        <div class="logo-text">BJJ <span>Manager</span></div>
+    </a>
+    <div class="nav-links">
+        <a href="#como-funciona" class="nav-link">Como funciona</a>
+        <a href="#funcionalidades" class="nav-link">Funcionalidades</a>
+        <a href="#preco" class="nav-link">Preço</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+    </div>
+    <a href="https://wa.me/5521964915864?text=Olá! Quero saber mais sobre o BJJ Manager" class="nav-btn" target="_blank">Falar no WhatsApp</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-    <div class="hero-belt"></div>
-    <div>
-        <div class="hero-tag">🥋 Sistema de Gestão</div>
-        <h1>GERENCIE SUA<br><span>ACADEMIA</span><br>COM FACILIDADE</h1>
-        <p>Controle de presença, cadastro de alunos e relatórios de frequência. Tudo na palma da sua mão, de qualquer dispositivo.</p>
+    <div class="hero-left">
+        <div class="hero-eyebrow">🥋 Sistema para Academias de Jiu-Jitsu</div>
+        <h1>GERENCIE SUA<br><em>ACADEMIA</em><br>COM PRECISÃO</h1>
+        <p class="hero-desc">Controle de presença, cadastro de alunos e relatórios de frequência. Desenvolvido para professores, funciona em qualquer dispositivo.</p>
         <div class="hero-btns">
-            <a href="https://wa.me/5521964915864?text=Olá! Quero testar o BJJ Manager" class="btn-primary" target="_blank">Começar agora</a>
-            <a href="#funcionalidades" class="btn-secondary">Ver funcionalidades</a>
+            <a href="https://wa.me/5521964915864?text=Quero testar o BJJ Manager!" class="btn-primary" target="_blank">Começar agora →</a>
+            <a href="#como-funciona" class="btn-outline">Como funciona</a>
+        </div>
+    </div>
+    <div class="hero-right">
+        <div class="mock-screen">
+            <div class="mock-header">
+                <div class="mock-dot" style="background:#ff5f57"></div>
+                <div class="mock-dot" style="background:#febc2e"></div>
+                <div class="mock-dot" style="background:#28c840"></div>
+                <div class="mock-header-title">🥋 Carioca BJJ</div>
+            </div>
+            <div class="mock-body">
+                <div class="mock-grid">
+                    <div class="mock-card">
+                        <div class="mock-card-icon">📋</div>
+                        <div class="mock-card-label">Fazer Chamada</div>
+                        <div class="mock-card-sub">Marcar presença dos alunos</div>
+                    </div>
+                    <div class="mock-card">
+                        <div class="mock-card-icon">👥</div>
+                        <div class="mock-card-label">Ver Alunos</div>
+                        <div class="mock-card-sub">Lista por turma</div>
+                    </div>
+                    <div class="mock-card">
+                        <div class="mock-card-icon">➕</div>
+                        <div class="mock-card-label">Cadastrar</div>
+                        <div class="mock-card-sub">Adicionar novo aluno</div>
+                    </div>
+                    <div class="mock-card">
+                        <div class="mock-card-icon">📊</div>
+                        <div class="mock-card-label">Frequência</div>
+                        <div class="mock-card-sub">% de presença</div>
+                    </div>
+                </div>
+                <div class="mock-list">
+                    <div class="mock-item verde">
+                        <span>Carlos Silva</span>
+                        <span class="mock-pct">92%</span>
+                    </div>
+                    <div class="mock-item laranja">
+                        <span>João Mendes</span>
+                        <span class="mock-pct">61%</span>
+                    </div>
+                    <div class="mock-item vermelho">
+                        <span>Pedro Souza</span>
+                        <span class="mock-pct">38%</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- STATS -->
-<div class="stats">
+<div class="stats-bar">
     <div class="stat reveal">
         <div class="stat-num">100%</div>
         <div class="stat-label">Online & na nuvem</div>
@@ -471,108 +897,239 @@
         <div class="stat-num">∞</div>
         <div class="stat-label">Alunos cadastrados</div>
     </div>
+    <div class="stat reveal">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Cliques para fazer chamada</div>
+    </div>
 </div>
 
-<!-- FEATURES -->
-<section class="section" id="funcionalidades">
-    <div class="section-tag reveal">Funcionalidades</div>
-    <h2 class="section-title reveal">TUDO QUE SUA<br>ACADEMIA PRECISA</h2>
-    <p class="section-sub reveal">Desenvolvido especialmente para academias de Jiu-Jitsu. Simples de usar, poderoso no controle.</p>
+<!-- HOW IT WORKS -->
+<section class="how-section" id="como-funciona">
+    <div class="section-eyebrow reveal">Como funciona</div>
+    <h2 class="section-title reveal">SIMPLES DO<br>INÍCIO AO FIM</h2>
+    <div class="steps">
+        <div class="step reveal">
+            <div class="step-num">01</div>
+            <div class="step-title">Entre em contato</div>
+            <div class="step-desc">Fale com a gente pelo WhatsApp. Configuramos o sistema com o nome da sua academia, locais e turmas em minutos.</div>
+        </div>
+        <div class="step reveal">
+            <div class="step-num">02</div>
+            <div class="step-title">Cadastre seus alunos</div>
+            <div class="step-desc">Adicione nome, faixa, data de nascimento e turma de cada aluno. Interface simples feita para professores.</div>
+        </div>
+        <div class="step reveal">
+            <div class="step-num">03</div>
+            <div class="step-title">Use no dia a dia</div>
+            <div class="step-desc">Faça a chamada em segundos, acompanhe a frequência com cores e veja quem precisa de atenção.</div>
+        </div>
+    </div>
+</section>
 
-    <div class="features-grid">
-        <div class="feature-card reveal">
-            <div class="feature-icon">📋</div>
-            <div class="feature-title">Controle de Presença</div>
-            <div class="feature-desc">Faça a chamada da turma em segundos. Selecione o local, a turma e marque os presentes com um clique.</div>
+<!-- FEATURES -->
+<section class="features-section" id="funcionalidades">
+    <div class="features-inner">
+        <div class="section-eyebrow reveal">Funcionalidades</div>
+        <h2 class="section-title reveal">TUDO QUE SUA<br>ACADEMIA PRECISA</h2>
+        <div class="features-grid">
+            <div class="feature-card reveal">
+                <div class="feature-icon">📋</div>
+                <div class="feature-title">Controle de Presença</div>
+                <div class="feature-desc">Faça a chamada em 3 cliques: selecione o local, a turma e marque os presentes. Rápido e sem erros.</div>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">👥</div>
+                <div class="feature-title">Cadastro Completo</div>
+                <div class="feature-desc">Registre nome, faixa, data de nascimento, email e telefone. Histórico completo de cada aluno.</div>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">Relatório de Frequência</div>
+                <div class="feature-desc">Percentual de presença com indicadores visuais: verde acima de 75%, laranja entre 50-75%, vermelho abaixo de 50%.</div>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">📱</div>
+                <div class="feature-title">Acesso pelo Celular</div>
+                <div class="feature-desc">Funciona em qualquer dispositivo. Abra no celular durante a aula sem precisar instalar nada.</div>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">☁️</div>
+                <div class="feature-title">Dados na Nuvem</div>
+                <div class="feature-desc">Seus dados ficam seguros em servidores na nuvem 24h por dia. Nunca perca informações.</div>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">🔐</div>
+                <div class="feature-title">Login por Professor</div>
+                <div class="feature-desc">Cada professor tem seu próprio acesso. Segurança total e controle de quem entra no sistema.</div>
+            </div>
         </div>
-        <div class="feature-card reveal">
-            <div class="feature-icon">👥</div>
-            <div class="feature-title">Cadastro de Alunos</div>
-            <div class="feature-desc">Registre nome, faixa, data de nascimento, contato e turma de cada aluno. Histórico completo sempre disponível.</div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+    <div class="section-eyebrow reveal">Depoimentos</div>
+    <h2 class="section-title reveal">O QUE OS<br>PROFESSORES DIZEM</h2>
+    <div class="testimonials-grid">
+        <div class="testimonial reveal">
+            <div class="testimonial-stars">★★★★★</div>
+            <div class="testimonial-text">"Antes anotava tudo no papel e sempre perdia. Agora faço a chamada direto no celular durante o aquecimento. Muito mais prático."</div>
+            <div class="testimonial-author">
+                <div class="author-avatar">AM</div>
+                <div>
+                    <div class="author-name">Antonio Mestre</div>
+                    <div class="author-role">Professor Faixa Preta</div>
+                </div>
+            </div>
         </div>
-        <div class="feature-card reveal">
-            <div class="feature-icon">📊</div>
-            <div class="feature-title">Relatório de Frequência</div>
-            <div class="feature-desc">Veja o percentual de presença de cada aluno com indicadores visuais em verde, laranja e vermelho.</div>
+        <div class="testimonial reveal">
+            <div class="testimonial-stars">★★★★★</div>
+            <div class="testimonial-text">"O relatório de frequência me ajuda muito a identificar quais alunos estão faltando para conversar com eles antes que desistam."</div>
+            <div class="testimonial-author">
+                <div class="author-avatar">RC</div>
+                <div>
+                    <div class="author-name">Roberto Coutinho</div>
+                    <div class="author-role">Coordenador de Academia</div>
+                </div>
+            </div>
         </div>
-        <div class="feature-card reveal">
-            <div class="feature-icon">📱</div>
-            <div class="feature-title">Acesso pelo Celular</div>
-            <div class="feature-desc">Funciona em qualquer dispositivo. Abra no celular, tablet ou computador sem precisar instalar nada.</div>
-        </div>
-        <div class="feature-card reveal">
-            <div class="feature-icon">☁️</div>
-            <div class="feature-title">Dados na Nuvem</div>
-            <div class="feature-desc">Seus dados ficam seguros em servidores na nuvem. Nunca perca informações por falha no computador.</div>
-        </div>
-        <div class="feature-card reveal">
-            <div class="feature-icon">🔐</div>
-            <div class="feature-title">Acesso com Login</div>
-            <div class="feature-desc">Cada professor tem seu próprio acesso. Segurança e controle de quem entra no sistema.</div>
+        <div class="testimonial reveal">
+            <div class="testimonial-stars">★★★★★</div>
+            <div class="testimonial-text">"Sistema simples e direto ao ponto. Não preciso de treinamento para usar. Abro no celular e já faço tudo que preciso."</div>
+            <div class="testimonial-author">
+                <div class="author-avatar">JS</div>
+                <div>
+                    <div class="author-name">Jorge Santos</div>
+                    <div class="author-role">Professor e Fundador</div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- PRICING -->
-<div class="pricing-section">
+<div class="pricing-section" id="preco">
     <div class="pricing-inner">
-        <div class="section-tag reveal" style="text-align:center">Planos</div>
-        <h2 class="section-title reveal" style="text-align:center">PREÇO ÚNICO.<br>SEM SURPRESAS.</h2>
-        <p class="section-sub reveal" style="text-align:center; margin: 0 auto 0">Um plano completo para sua academia. Cancele quando quiser.</p>
+        <div class="section-eyebrow reveal">Planos</div>
+        <h2 class="section-title reveal">PREÇO ÚNICO.<br>SEM SURPRESAS.</h2>
+        <p class="reveal" style="color:var(--muted); font-size:17px;">Um plano completo. Cancele quando quiser.</p>
 
         <div class="price-card reveal">
-            <div class="price-badge">🔥 Promoção de lançamento</div>
-            <div style="color:#888; font-size:22px; text-decoration:line-through; margin-bottom:4px;">R$249,99/mês</div>
+            <div class="price-badge">🔥 Promoção de Lançamento</div>
+            <div class="price-original">R$249,99/mês</div>
             <div class="price-value">R$79</div>
-            <div class="price-period">,90 por mês</div>
-            <div style="text-align:center; margin-bottom:32px;">
-                <span style="background:rgba(204,0,0,0.15); border:1px solid rgba(204,0,0,0.4); color:#ff6b6b; padding:8px 20px; border-radius:20px; font-size:14px; font-weight:600;">💸 Você economiza R$170,09 por mês</span>
-            </div>
+            <div class="price-cents">,90 por mês</div>
+            <div class="price-economy">💸 Você economiza R$170,09 por mês</div>
+            <div class="price-divider"></div>
             <ul class="price-features">
                 <li>Alunos ilimitados</li>
                 <li>Múltiplos professores</li>
+                <li>Múltiplos locais e turmas</li>
                 <li>Controle de presença</li>
                 <li>Relatório de frequência</li>
                 <li>Acesso pelo celular</li>
                 <li>Dados salvos na nuvem</li>
                 <li>Suporte pelo WhatsApp</li>
             </ul>
-            <a href="https://wa.me/5521964915864?text=Quero assinar o BJJ Manager!" class="btn-primary" target="_blank" style="font-size:18px; padding:20px 50px;">Assinar agora</a>
+            <a href="https://wa.me/5521964915864?text=Quero assinar o BJJ Manager!" class="btn-primary" target="_blank" style="font-size:17px; padding:18px 50px; width:100%; text-align:center;">Assinar agora →</a>
         </div>
     </div>
 </div>
 
-<!-- CTA -->
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+    <div class="section-eyebrow reveal">FAQ</div>
+    <h2 class="section-title reveal">PERGUNTAS<br>FREQUENTES</h2>
+    <div class="faq-list">
+        <div class="faq-item reveal">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                Preciso instalar alguma coisa?
+                <span class="faq-arrow">+</span>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-inner">Não. O sistema funciona direto no navegador do celular ou computador. Basta acessar o link e fazer login.</div></div>
+        </div>
+        <div class="faq-item reveal">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                Quantos professores podem usar?
+                <span class="faq-arrow">+</span>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-inner">O plano inclui múltiplos professores. Cada um tem seu próprio login e senha. Basta nos informar os dados de acesso.</div></div>
+        </div>
+        <div class="faq-item reveal">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                Os dados ficam salvos mesmo sem internet?
+                <span class="faq-arrow">+</span>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-inner">Os dados ficam salvos na nuvem 24 horas por dia. Você precisa de internet para acessar, mas nunca perde os dados.</div></div>
+        </div>
+        <div class="faq-item reveal">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                Posso cancelar quando quiser?
+                <span class="faq-arrow">+</span>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-inner">Sim. Não há fidelidade nem multa. Cancele quando quiser pelo WhatsApp.</div></div>
+        </div>
+        <div class="faq-item reveal">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                Como funciona o suporte?
+                <span class="faq-arrow">+</span>
+            </div>
+            <div class="faq-answer"><div class="faq-answer-inner">Suporte direto pelo WhatsApp. Respondemos rapidamente para resolver qualquer dúvida ou problema.</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA FINAL -->
 <section class="cta-section">
     <h2>PRONTO PARA<br>COMEÇAR?</h2>
     <p>Entre em contato e comece a usar hoje mesmo.</p>
-    <a href="https://wa.me/55?text=Olá! Quero saber mais sobre o BJJ Manager" class="btn-primary" target="_blank" style="font-size:18px; padding:20px 50px;">Falar no WhatsApp 💬</a>
+    <a href="https://wa.me/5521964915864?text=Olá! Quero saber mais sobre o BJJ Manager" class="btn-primary" target="_blank" style="font-size:17px; padding:18px 44px;">Falar no WhatsApp 💬</a>
+    <div class="cta-note">Sem compromisso · Suporte pelo WhatsApp · Cancele quando quiser</div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-    <p>© 2026 <span>BJJ Manager</span> — Desenvolvido por Breno. Todos os direitos reservados.</p>
+    <div class="footer-logo">
+        <div class="belt-icon" style="transform:scale(0.8)">
+            <div class="belt-body"></div>
+            <div class="belt-stripe"></div>
+            <div class="belt-knot"></div>
+        </div>
+        <div class="footer-logo-text">BJJ Manager</div>
+    </div>
+    <div class="footer-copy">© 2026 <span>BJJ Manager</span> — Desenvolvido por Breno. Todos os direitos reservados.</div>
 </footer>
 
 <script>
-    // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', e => {
-            e.preventDefault();
-            document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-        });
-    });
-
     // Reveal on scroll
     const observer = new IntersectionObserver(entries => {
         entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
-                setTimeout(() => entry.target.classList.add('visible'), i * 80);
+                setTimeout(() => entry.target.classList.add('visible'), i * 60);
             }
         });
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // FAQ toggle
+    function toggleFaq(el) {
+        const item = el.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
 </script>
 
 </body>
