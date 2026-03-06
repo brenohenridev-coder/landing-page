@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BJJ Manager – Sistema de Gestão para Academias</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #cc0000;
+            --dark-red: #990000;
+            --black: #0a0a0a;
+            --dark: #111111;
+            --card: #1a1a1a;
+            --border: #2a2a2a;
+            --text: #ffffff;
+            --muted: #888888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background: var(--black);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: rgba(10,10,10,0.95);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 3px;
+            color: var(--red);
+        }
+
+        .nav-btn {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover { background: var(--dark-red); }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 40px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 40%, rgba(204,0,0,0.15) 0%, transparent 70%);
+        }
+
+        .hero-belt {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #000 20%, var(--red) 50%, #000 80%);
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: rgba(204,0,0,0.15);
+            border: 1px solid rgba(204,0,0,0.4);
+            color: var(--red);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .hero h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(60px, 10vw, 120px);
+            line-height: 0.95;
+            letter-spacing: 4px;
+            margin-bottom: 24px;
+            animation: fadeUp 0.6s ease 0.1s both;
+        }
+
+        .hero h1 span { color: var(--red); }
+
+        .hero p {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--muted);
+            max-width: 560px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+            animation: fadeUp 0.6s ease 0.2s both;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeUp 0.6s ease 0.3s both;
+        }
+
+        .btn-primary {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 8px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--dark-red);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--border);
+            padding: 18px 40px;
+            border-radius: 8px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        /* STATS */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding: 60px 40px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 52px;
+            color: var(--red);
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* FEATURES */
+        .section {
+            padding: 100px 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-tag {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(40px, 6vw, 64px);
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            line-height: 1;
+        }
+
+        .section-sub {
+            color: var(--muted);
+            font-size: 17px;
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 60px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 36px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--red);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(204,0,0,0.3);
+            transform: translateY(-4px);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* PRICING */
+        .pricing-section {
+            padding: 100px 40px;
+            background: var(--dark);
+        }
+
+        .pricing-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .price-card {
+            background: var(--card);
+            border: 2px solid var(--red);
+            border-radius: 24px;
+            padding: 60px 40px;
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .price-badge {
+            background: var(--red);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .price-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 80px;
+            color: var(--red);
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .price-period {
+            color: var(--muted);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 40px;
+            text-align: left;
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .price-features li {
+            padding: 10px 0;
+            font-size: 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .price-features li:last-child { border-bottom: none; }
+
+        .price-features li::before {
+            content: '✓';
+            color: var(--red);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        /* CTA */
+        .cta-section {
+            padding: 120px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(204,0,0,0.1) 0%, transparent 70%);
+        }
+
+        .cta-section h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(48px, 8vw, 96px);
+            letter-spacing: 4px;
+            line-height: 1;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .cta-section p {
+            color: var(--muted);
+            font-size: 18px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        footer span { color: var(--red); }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            nav { padding: 16px 24px; }
+            .stats { gap: 30px; }
+            .section { padding: 60px 24px; }
+            .pricing-section { padding: 60px 24px; }
+            .cta-section { padding: 80px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-logo">BJJ Manager</div>
+    <a href="https://wa.me/55?text=Olá! Quero saber mais sobre o BJJ Manager" class="nav-btn" target="_blank">Falar no WhatsApp</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-belt"></div>
+    <div>
+        <div class="hero-tag">🥋 Sistema de Gestão</div>
+        <h1>GERENCIE SUA<br><span>ACADEMIA</span><br>COM FACILIDADE</h1>
+        <p>Controle de presença, cadastro de alunos e relatórios de frequência. Tudo na palma da sua mão, de qualquer dispositivo.</p>
+        <div class="hero-btns">
+            <a href="https://wa.me/5521964915864?text=Olá! Quero testar o BJJ Manager" class="btn-primary" target="_blank">Começar agora</a>
+            <a href="#funcionalidades" class="btn-secondary">Ver funcionalidades</a>
+        </div>
+    </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+    <div class="stat reveal">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Online & na nuvem</div>
+    </div>
+    <div class="stat reveal">
+        <div class="stat-num">24H</div>
+        <div class="stat-label">Disponível sempre</div>
+    </div>
+    <div class="stat reveal">
+        <div class="stat-num">R$0</div>
+        <div class="stat-label">Sem taxa de adesão</div>
+    </div>
+    <div class="stat reveal">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Alunos cadastrados</div>
+    </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="funcionalidades">
+    <div class="section-tag reveal">Funcionalidades</div>
+    <h2 class="section-title reveal">TUDO QUE SUA<br>ACADEMIA PRECISA</h2>
+    <p class="section-sub reveal">Desenvolvido especialmente para academias de Jiu-Jitsu. Simples de usar, poderoso no controle.</p>
+
+    <div class="features-grid">
+        <div class="feature-card reveal">
+            <div class="feature-icon">📋</div>
+            <div class="feature-title">Controle de Presença</div>
+            <div class="feature-desc">Faça a chamada da turma em segundos. Selecione o local, a turma e marque os presentes com um clique.</div>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">👥</div>
+            <div class="feature-title">Cadastro de Alunos</div>
+            <div class="feature-desc">Registre nome, faixa, data de nascimento, contato e turma de cada aluno. Histórico completo sempre disponível.</div>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">📊</div>
+            <div class="feature-title">Relatório de Frequência</div>
+            <div class="feature-desc">Veja o percentual de presença de cada aluno com indicadores visuais em verde, laranja e vermelho.</div>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">📱</div>
+            <div class="feature-title">Acesso pelo Celular</div>
+            <div class="feature-desc">Funciona em qualquer dispositivo. Abra no celular, tablet ou computador sem precisar instalar nada.</div>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">☁️</div>
+            <div class="feature-title">Dados na Nuvem</div>
+            <div class="feature-desc">Seus dados ficam seguros em servidores na nuvem. Nunca perca informações por falha no computador.</div>
+        </div>
+        <div class="feature-card reveal">
+            <div class="feature-icon">🔐</div>
+            <div class="feature-title">Acesso com Login</div>
+            <div class="feature-desc">Cada professor tem seu próprio acesso. Segurança e controle de quem entra no sistema.</div>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<div class="pricing-section">
+    <div class="pricing-inner">
+        <div class="section-tag reveal" style="text-align:center">Planos</div>
+        <h2 class="section-title reveal" style="text-align:center">PREÇO ÚNICO.<br>SEM SURPRESAS.</h2>
+        <p class="section-sub reveal" style="text-align:center; margin: 0 auto 0">Um plano completo para sua academia. Cancele quando quiser.</p>
+
+        <div class="price-card reveal">
+            <div class="price-badge">🔥 Promoção de lançamento</div>
+            <div style="color:#888; font-size:22px; text-decoration:line-through; margin-bottom:4px;">R$249,99/mês</div>
+            <div class="price-value">R$79</div>
+            <div class="price-period">,90 por mês</div>
+            <div style="text-align:center; margin-bottom:32px;">
+                <span style="background:rgba(204,0,0,0.15); border:1px solid rgba(204,0,0,0.4); color:#ff6b6b; padding:8px 20px; border-radius:20px; font-size:14px; font-weight:600;">💸 Você economiza R$170,09 por mês</span>
+            </div>
+            <ul class="price-features">
+                <li>Alunos ilimitados</li>
+                <li>Múltiplos professores</li>
+                <li>Controle de presença</li>
+                <li>Relatório de frequência</li>
+                <li>Acesso pelo celular</li>
+                <li>Dados salvos na nuvem</li>
+                <li>Suporte pelo WhatsApp</li>
+            </ul>
+            <a href="https://wa.me/5521964915864?text=Quero assinar o BJJ Manager!" class="btn-primary" target="_blank" style="font-size:18px; padding:20px 50px;">Assinar agora</a>
+        </div>
+    </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+    <h2>PRONTO PARA<br>COMEÇAR?</h2>
+    <p>Entre em contato e comece a usar hoje mesmo.</p>
+    <a href="https://wa.me/55?text=Olá! Quero saber mais sobre o BJJ Manager" class="btn-primary" target="_blank" style="font-size:18px; padding:20px 50px;">Falar no WhatsApp 💬</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 <span>BJJ Manager</span> — Desenvolvido por Breno. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // Reveal on scroll
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('visible'), i * 80);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
